@@ -1,0 +1,40 @@
+install.packages("factoextra")
+install.packages("car")
+library("car")
+summary(BestCity)                                                                                                       
+a<-BestCity[,2:14]
+a
+b<-cor(a)
+b #correlation matrix
+cov(a) #covariance matrix
+library(corrplot)
+#correlation plot
+z<-corrplot(b)
+corrplot(z,method = "pie")
+corrplot(z,type="lower")
+corrplot(b,method="color",order = "hclust")
+corrplot.mixed(b,upper="number",lower="color",order="hclust")
+#pca
+res.pca<-prcomp(a,scale=TRUE)
+library(factoextra)
+fviz_eig(res.pca) #screeplot
+fviz_pca_ind(res.pca,col.ind="cos2",gradient.cols=c("#00AFBB","#E7B800","#FC4E07"),repel=TRUE)
+fviz_pca_var(res.pca,col.var="contrib",gradient.cols=c("#00AFBB","#E7B800","#FC4E07"),repel=TRUE)
+fviz_pca_biplot(res.pca,repel=TRUE,col.var="#2E9FDF",col.ind="#696969")
+#Eigenvalues
+eig.val<-get_eigenvalue(res.pca)
+eig.val
+#results for variables
+res.var<-get_pca_var(res.pca)
+res.var$coord
+res.var$contrib
+res.var$cos2
+#results for individuals
+res.ind<-get_pca_ind(res.pca)
+res.ind$coord
+res.ind$contrib
+res.ind$cos2
+#scatterplot
+plot(a$Income,a$Commute,main="Main title",xlab = "income",ylab = "housing")
+library(scatterplot3d)
+scatterplot3d(a$Income,a$Housing,a$`Job Growth`)
